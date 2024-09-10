@@ -1,3 +1,8 @@
-.single{
-    display: flex;
+.single {
+  display: flex;
+}
+@media (max-width: 768px) {
+  .sidebarProfile {
+    display: none;
+  }
 }

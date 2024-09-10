@@ -1,31 +1,35 @@
 import React, { useState } from "react";
-import "./write.css";
 import { Cloudinary } from "cloudinary-core";
-import useAddPost from "../../hooks/useAddPost";
-import { useNavigate } from "react-router-dom";
-
+import useEditPost from "../../hooks/useEditPost";
+import { useNavigate, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 const cld = new Cloudinary({ cloud_name: "your-cloud-name" });
 
 export default function Write() {
   const navigate = useNavigate();
-  
+  const location = useLocation();
+  const { prevtitle, prevdescription, previmage } = location.state || {};
+
   const [file, setFile] = useState("");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState(prevtitle);
+  const [description, setDescription] = useState(prevdescription);
   const formdata = new FormData();
-  const { loading, addPost } = useAddPost();
-  
+  const { loading, editPost } = useEditPost();
+  const { id } = useParams();
+  console.log("id::", id);
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle form submission logic here
+    formdata.append("postId", id);
     formdata.append("title", title);
     formdata.append("description", description);
+    formdata.append("previmage", previmage.public_id);
     formdata.append("file", file);
-    await addPost(formdata)
+    await editPost(formdata);
     setTitle("");
     setDescription("");
     setFile("");
-    navigate('/')
+    navigate("/");
   };
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -34,7 +38,7 @@ export default function Write() {
         onSubmit={handleSubmit}
       >
         <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
-          Create a Post
+          Update Your Post
         </h2>
 
         <div className="mb-4">
@@ -84,7 +88,7 @@ export default function Write() {
             id="image"
             type="file"
             className="w-full p-3 border rounded-md focus:outline-none"
-            onChange={e => setFile(e.target.files[0])}
+            onChange={(e) => setFile(e.target.files[0])}
           />
         </div>
 

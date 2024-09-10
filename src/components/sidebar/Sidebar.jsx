@@ -2,16 +2,16 @@ import { Link } from "react-router-dom";
 import "./sidebar.css";
 import { useAuthContext } from "../../context/AuthContext";
 
-export default function Sidebar() {
+export default function Sidebar({ user }) {
   const { authUser } = useAuthContext()
-  console.log(authUser)
+  const author = user != undefined ? user :authUser;
   return (
     <div className="sidebar  border-slate-600 border-4 mt-12 text-black ">
       <div className="sidebarItem intro">
-        <span className="sidebarTitle">ABOUT {authUser?.fullName}</span>
+        <span className="sidebarTitle">ABOUT {author?.fullName}</span>
         <img
-          src={authUser?.profilePic}
-          alt={authUser?.username}
+          src={author?.profilePic}
+          alt={author?.username}
         />
         <p>
           Laboris sunt aute cupidatat velit magna velit ullamco dolore mollit

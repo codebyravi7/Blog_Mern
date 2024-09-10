@@ -24,6 +24,7 @@ const useLogin = () => {
 			// console.log("datatoken::", JSON.stringify(data));
 			localStorage.setItem("chat-user", JSON.stringify(data));
 			setAuthUser(data);
+			return data;
 		} catch (error) {
 			toast.error(error.message);
 		} finally {
